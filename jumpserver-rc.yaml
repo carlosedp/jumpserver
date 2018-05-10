@@ -14,12 +14,27 @@ spec:
     spec:
       containers:
       - name: sshd-jumpserver
-        image: kubernetesio/sshd-jumpserver
+        image: carlosedp/ssh-jumpserver:arm64
         ports:
           - containerPort: 22
-        env:
-          - name: PUBLIC_KEY
-            valueFrom:
-              secretKeyRef:
-                name: sshkey
-                key: authorizedkeys
+        volumeMounts:
+        - name: authorized-keys
+          mountPath: /root/.ssh/authorized_keys
+          subPath: authorized_keys
+          readOnly: true
+        - name: ssh-config
+          mountPath: /root/.ssh/config
+          subPath: config
+        #env:
+        #  - name: PUBLIC_KEY
+        #    valueFrom:
+        #      secretKeyRef:
+        #        name: ssh-authorized-keys
+        #        key: authorized_keys
+      volumes:
+      - name: authorized-keys
+        secret:
+          secretName: ssh-authorized-keys
+      - name: ssh-config
+        secret:
+          secretName: ssh-config
