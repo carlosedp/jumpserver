@@ -10,6 +10,8 @@ deploy:
 remove:
 	kubectl delete -f jumpserver-service.yaml
 	kubectl delete -f jumpserver-rc.yaml
+  kubectl delete secret ssh-config
+  kubectl delete secret ssh-authorized-keys
 
 newkey:
 	rm -f sshkeys/id_rsa*
